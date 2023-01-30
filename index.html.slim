@@ -1,0 +1,56 @@
+.row.wrapper.border-bottom.white-bg.page-heading
+  .col-lg-8
+      h2 = 'User Details'
+
+.wrapper.wrapper-content  
+  .ibox.float-e-margins
+    .ibox-title style="padding-top: 5px;"
+      h5 style="margin-top: 10px;" = "Users | Total: #{@total}"
+      = link_to 'User Registration', admin_user_portals_create_path, :class => 'btn btn-primary pull-right fa', :style => 'margin-top:5px;'
+
+    .ibox-content style="overflow-x: auto"
+      form method="get" action="#{admin_user_portals_index_url}" id="search_form"
+        .row
+          .col-sm-2
+            .form-group
+              label.control-label = "First Name"
+              input.form-control placeholder="First Name" name="first_name" value="#{params[:first_name]}" type="text"
+
+          .col-sm-2
+            .form-group
+              label.control-label = "Last Name"
+              input.form-control placeholder="Last Name" name="last_name" value="#{params[:last_name]}" type="text"
+
+          .col-sm-2
+            .form-group
+              label.control-label
+                | Role<span class="text-danger">*</span>
+              select.form-control name='user_portal[role]' required="true"
+                - UserPortal.roles.each do |key, value|
+                  option value="#{key}" selected=("selected" if "#{params[:role]}"==key) = key.titleize
+
+    .ibox-content style="overflow-x: auto"
+      .table-responsive
+        table.table.table-striped.table-bordered.table-condensed
+          thead
+            tr
+              th = 'First Name'
+              th = 'Last Name'
+              th = 'Role'
+              th = 'Image'
+
+          tbody
+            - @user_portals.each do |t|
+              tr
+                td = link_to t.first_name, admin_mobile_banners_update_path(id: t.id)
+                td = link_to t.last_name, admin_mobile_banners_update_path(id: t.id)
+                td = t.role.titleize
+                td = link_to ' Preview', t.image, target: '_blank', class: 'fa fa-external-link btn btn-success btn-xs'
+
+      #pagination.text-right
+        = paginate @user_portals, :theme => 'twitter-bootstrap-3'
+
+javascript:
+  $('body').on('change', '.form-control', function(){
+    $('#search_form').submit();
+  })

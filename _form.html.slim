@@ -1,0 +1,28 @@
+- @user_portal.errors.any?
+  .alert.alert-danger
+    ul
+    - @user_portal.errors.each do |key, value|
+      li = "#{key} #{value}".strip.humanize
+
+.row
+  .col-sm-8
+    .form-group
+      label.control-label
+        | First Name<span class="text-danger">*</span>
+      = f.text_field :first_name, class: 'form-control', required: true, placeholder: 'First Name', autocomplete: 'off'
+
+.row
+  .col-sm-8
+    .form-group
+      label.control-label
+        | Last Name<span class="text-danger">*</span>
+      = f.text_field :last_name, class: 'form-control', required: true, placeholder: 'Last Name', autocomplete: 'off'
+      
+.row
+  .col-sm-8
+    .form-group
+      label.control-label
+        | Role<span class="text-danger">*</span>
+      select.form-control name='user_portal[role]' required="true"
+        - UserPortal.roles.each do |key, value|
+          option value="#{key}" selected=("selected" if "#{@user_portal.role}"==key) = key.titleize

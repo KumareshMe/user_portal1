@@ -1,0 +1,20 @@
+.row.wrapper.border-bottom.white-bg.page-heading
+  .col-lg-8
+      h2 = 'User Update Form'
+
+.wrapper.wrapper-content  
+  .ibox.float-e-margins
+    .ibox-content style="overflow-x: auto; min-height: 750px"
+      = form_for @user_portal, url: admin_user_portal_update_path(id: @user_portal.id), local: true, :html => { :multipart => true } do |f|
+        = render 'form', {user_portal: @user_portal, f: f}
+
+        .row
+          .col-sm-8
+            .form-group
+              label.control-label
+                | Image File<span class="text-danger">*</span>
+              = f.file_field :image_file, class: 'form-control', accept: '.jpg,.jpeg,.png'
+              .help_block.text-danger = 'Please upload image size less than 1MB | Supported format ".jpg,.jpeg,.png"'
+
+            .form-group
+              = f.submit "Update User", class: "btn btn-primary"
