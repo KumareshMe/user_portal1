@@ -8,21 +8,27 @@
   .col-sm-8
     .form-group
       label.control-label
-        | First Name<span class="text-danger">*</span>
+        | First Name*
+        br
       = f.text_field :first_name, class: 'form-control', required: true, placeholder: 'First Name', autocomplete: 'off'
+    br
 
 .row
   .col-sm-8
     .form-group
       label.control-label
-        | Last Name<span class="text-danger">*</span>
+        | Last Name*
+        br
       = f.text_field :last_name, class: 'form-control', required: true, placeholder: 'Last Name', autocomplete: 'off'
+    br
       
 .row
   .col-sm-8
     .form-group
       label.control-label
-        | Role<span class="text-danger">*</span>
+        | Role*
+        br
       select.form-control name='user_portal[role]' required="true"
+        option value="" = 'Select the role type'
         - UserPortal.roles.each do |key, value|
           option value="#{key}" selected=("selected" if "#{@user_portal.role}"==key) = key.titleize

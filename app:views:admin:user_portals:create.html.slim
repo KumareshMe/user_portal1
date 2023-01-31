@@ -8,13 +8,17 @@
       = form_for @user_portal, url: admin_user_portals_create_path, local: true, :html => { :multipart => true } do |f|
         = render 'form', {user_portal: @user_portal, f: f}
 
+        br
         .row
           .col-sm-8
             .form-group
               label.control-label
-                | Image File<span class="text-danger">*</span>
-              = f.file_field :image_file, class: 'form-control', required: true, accept: '.jpg,.jpeg,.png'
-                .help_block.text-danger = 'Please upload image size less than 1MB | Supported format ".jpg,.jpeg,.png" | Supported Size "Zaggle Banner: 693:425/Partner Banner: 67:24"'
+                | Image*
+                br
+              = f.file_field :image, class: 'form-control', required: true, accept: '.jpg,.jpeg,.png'
+              .help_block.text-danger = 'Please upload image size less than 1MB | Supported format ".jpg,.jpeg,.png"'
 
+            br
+            br
             .form-group
               = f.submit "Register User", class: "btn btn-primary"

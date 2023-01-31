@@ -6,11 +6,6 @@ class Admin::UserPortalsController < ApplicationController
     @total = @user_portals.count
   end
 
-  def reports
-    @user_portals = UserPortal.search(params)
-    @user_portals = @user_portals.page(params[:page] || 1).per(params[:per] || 20)
-  end
-
   def create
     @user_portal = UserPortal.new
 
@@ -19,32 +14,41 @@ class Admin::UserPortalsController < ApplicationController
     @user_portal = UserPortal.new(user_portal_params)
 
     if @user_portal.save
-      redirect_to @user_portal, notice: 'User successfully created.'
+      flash[:notice] = 'User successfully created'
+      redirect_to admin_user_portals_index_url
     end
   end
 
   def update
-    @model = MobileBanner.find(params[:id])
+    @user_portal = UserPortal.find_by(id: params[:id])
 
     return unless request.patch?
 
     if @user_portal.update(user_portal_params)
-      redirect_to @user_portal, notice: 'User successfully updated.'
+      flash[:notice] = 'User successfully updated'
+      redirect_to admin_user_portals_index_url
     end
   end
 
   def destroy
-    @user_portal.destroy
-    redirect_to user_portals_url, notice: 'User successfully destroyed.'
+    @user_portal = UserPortal.find_by(id: params[:id])
+
+    return unless request.delete?
+
+    if @user_portal.destroy
+      flash[:notice] = 'User successfully deleted'
+      redirect_to admin_user_portals_index_url
+    end
   end
 
   private
+
   # Only allow permitted parameter and raise an error if unpermitted parameter is found
   def user_portal_params
-    # params.require(:user_portal).permit(:first_name, :last_name, :role, :image)
+    params.require(:user_portal).permit(:first_name, :last_name, :role, :image)
   end
 
-  # define the roles in the policy file app/policies/user_portal_policy.rb and allow only those roles to access the pages
+  # we can define the roles in the policy file app/policies/user_portal_policy.rb and allow only those roles to access the pages
   def pundit_authorize
     authorize :user_portals
   end

@@ -1,51 +1,68 @@
 .row.wrapper.border-bottom.white-bg.page-heading
   .col-lg-8
-      h2 = 'User Details'
+      h2 = 'Welcome to user registration portal'
 
 .wrapper.wrapper-content  
   .ibox.float-e-margins
     .ibox-title style="padding-top: 5px;"
-      h5 style="margin-top: 10px;" = "Users | Total: #{@total}"
+      h3 style="margin-top: 10px;" = 'Click on the below link to register a new user'
       = link_to 'User Registration', admin_user_portals_create_path, :class => 'btn btn-primary pull-right fa', :style => 'margin-top:5px;'
+    br
+    br
 
     .ibox-content style="overflow-x: auto"
+      h3 style="margin-top: 10px;" = 'Please user the below fields to filter users'
       form method="get" action="#{admin_user_portals_index_url}" id="search_form"
         .row
           .col-sm-2
             .form-group
-              label.control-label = "First Name"
+              label.control-label = "First Name*"
+              br
               input.form-control placeholder="First Name" name="first_name" value="#{params[:first_name]}" type="text"
 
+          br
           .col-sm-2
             .form-group
-              label.control-label = "Last Name"
+              label.control-label = "Last Name*"
+              br
               input.form-control placeholder="Last Name" name="last_name" value="#{params[:last_name]}" type="text"
 
+          br
           .col-sm-2
             .form-group
               label.control-label
-                | Role<span class="text-danger">*</span>
-              select.form-control name='user_portal[role]' required="true"
+                | Role*
+                br
+              select.form-control name='role' required="true"
+                option value="" = 'Select the role type'
                 - UserPortal.roles.each do |key, value|
                   option value="#{key}" selected=("selected" if "#{params[:role]}"==key) = key.titleize
 
+    br
+    br
     .ibox-content style="overflow-x: auto"
+      h3 = "List of registered users: #{@total}"
+      br
       .table-responsive
         table.table.table-striped.table-bordered.table-condensed
           thead
             tr
-              th = 'First Name'
-              th = 'Last Name'
+              th = 'First_Name'
+              th = 'Last_Name'
               th = 'Role'
               th = 'Image'
+              th = 'Edit_User'
+              th = 'Delete_User'
 
           tbody
             - @user_portals.each do |t|
               tr
-                td = link_to t.first_name, admin_mobile_banners_update_path(id: t.id)
-                td = link_to t.last_name, admin_mobile_banners_update_path(id: t.id)
-                td = t.role.titleize
-                td = link_to ' Preview', t.image, target: '_blank', class: 'fa fa-external-link btn btn-success btn-xs'
+                td = t.first_name.capitalize
+                td = t.last_name.capitalize
+                td = t.role&.titleize
+                td = link_to 'Click to preview the image', t.image, target: '_blank', class: 'fa fa-external-link btn btn-success btn-xs'
+                td = link_to 'Edit', admin_user_portals_update_path(id: t.id)
+                td = link_to 'Delete', admin_user_portals_destroy_path(id: t.id), method: :delete, data: { confirm: 'Are you sure?' }
 
       #pagination.text-right
         = paginate @user_portals, :theme => 'twitter-bootstrap-3'
